@@ -46,6 +46,6 @@ VOLUME ["/import"]
 CMD ["/usr/bin/shiny-server.sh"]
 
 # Added ####
-COPY /import srv/shiny-server/example-data
+#COPY /import srv/shiny-server/example-data
 # Attempt to copy the data in /import into example-data
 #WORKDIR "/import"

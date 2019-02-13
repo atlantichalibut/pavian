@@ -14,8 +14,11 @@ run:
 push:
 	docker push atlantichalibut/pavian
 
-inspect:
-	docker run --rm -i -t --entrypoint /bin/bash -p $(PORT):80 atlantichalibut/pavian
+#inspect:
+#	docker run --rm -i -t --entrypoint /bin/bash -p $(PORT):80 atlantichalibut/pavian
+
+stop:
+	docker stop atlantichalibut/pavian; docker rm atlantichalibut/pavian
 
 # vim:ft=make
 #

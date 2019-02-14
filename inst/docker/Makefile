@@ -20,5 +20,9 @@ push:
 stop:
 	docker stop atlantichalibut/pavian; docker rm atlantichalibut/pavian
 
+# Added
+#run:
+#	docker exec
+
 # vim:ft=make
 #

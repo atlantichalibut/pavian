@@ -21,8 +21,8 @@ stop:
 	docker stop atlantichalibut/pavian; docker rm atlantichalibut/pavian
 
 # Added
-#run:
-#	docker exec
+exec:
+	docker exec atlantichalibut/pavian cp import/ srv/shiny-server/example-data/
 
 # vim:ft=make
 #

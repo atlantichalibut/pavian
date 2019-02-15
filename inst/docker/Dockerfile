@@ -41,6 +41,7 @@ COPY shiny-server.sh /usr/bin/shiny-server.sh
 
 # Added ####
 COPY monitor_traffic.sh /monitor_traffic.sh
+
 VOLUME ["/import"]
 
 CMD ["/usr/bin/shiny-server.sh"]

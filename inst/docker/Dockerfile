@@ -47,6 +47,3 @@ VOLUME ["/import"]
 
 CMD ["/usr/bin/shiny-server.sh"]
 
-# Added ####
-COPY /import srv/shiny-server
-

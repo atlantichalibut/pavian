@@ -44,10 +44,9 @@ COPY monitor_traffic.sh /monitor_traffic.sh
 
 VOLUME ["/import"]
 
+
 CMD ["/usr/bin/shiny-server.sh"]
 
 # Added ####
-#WORKDIR "/import"
-#COPY file.dat srv/shiny-server/example-data
-# Attempt to copy the data in /import into example-data
-#WORKDIR "/import"
+COPY /import srv/shiny-server
+

@@ -3,6 +3,7 @@
 library(shiny)
 library(rhandsontable)
 library(shinyFileTree)
+library(shinyFiles)
 
 serverDataPanel <- function(ns) {
   tabPanel(
@@ -48,17 +49,19 @@ exampleDataPanel <- function(ns) {
 }
 
 uploadFilePanel <- function(ns) {
-  tabPanel("Upload files",
+  tabPanel("Upload files GOTTEM",
            "Upload metagenomics report files from the local computer. If selecting multiple files does not work, please
             try with a different browser. With each sample set, you may also include meta-data with a colon-separated sample_data.csv file 
-            that has at least the columns 'Name' and 'ReportFile'.",
-           fileInput(
-             ns("file_upload"),
-             label="",
-             placehold = "Upload report files",
-             width = "600px",
-             multiple = TRUE
-           ))
+            that has at least the columns 'Name' and 'ReportFile'."
+      
+           # fileInput(
+           #   ns("file_upload"),
+           #   label="",
+           #   placehold = "Upload report files",
+           #   width = "600px",
+           #   multiple = TRUE
+           # )
+           )
 }
 
 #' UI part of pavian data input module

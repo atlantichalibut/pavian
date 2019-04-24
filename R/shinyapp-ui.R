@@ -127,12 +127,7 @@ dashboardUI <- function(request) {
                           verbatimTextOutput("session_info1")
                       )
                     )
-                  ), # ADDED ####
-                  box(selectizeInput(inputId = 'choosedata',
-                                     label = 'Select Dataset',
-                                     choices = NULL,
-                                     multiple = TRUE)
-                      )
+                  )
                 )
   )
 }

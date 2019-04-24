@@ -61,6 +61,15 @@ uploadFilePanel <- function(ns) {
            ))
 }
 
+selectDataPanel <- function(ns) {
+  tabPanel("Select data",
+           selectizeInput(inputId = "choosedata",
+                          label = "Select Dataset",
+                          choices = NULL,
+                          multiple = TRUE)
+           )
+}
+
 #' UI part of pavian data input module
 #'
 #' @param id Namespace ID.
@@ -100,7 +109,8 @@ dataInputModuleUI <- function(id,
         selected = start_with,
         uploadFilePanel(ns),
         serverDataPanel(ns),
-        exampleDataPanel(ns)
+        exampleDataPanel(ns),
+        selectDataPanel(ns)
       )
     } else {
       shinydashboard::tabBox(
@@ -108,7 +118,8 @@ dataInputModuleUI <- function(id,
         title = "Data Source",
         selected = start_with,
         uploadFilePanel(ns),
-        exampleDataPanel(ns)
+        exampleDataPanel(ns),
+        selectDataPanel(ns)
       )
     }
   },

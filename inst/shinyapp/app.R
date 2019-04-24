@@ -13,6 +13,13 @@ if (!require(Rsamtools)) {
   library(Rsamtools)
 }
 
+if(!require(GalaxyConnector)){
+  options(repos = c(CRAN = "http://cran.rstudio.com")) 
+  if(!require(remotes)){ install.packages("remotes") }
+  remotes::install_github("justinband/r-galaxy-connector")
+  library(GalaxyConnector)
+}
+
 if (!dir.exists(rappdirs::user_config_dir("pavian", expand = FALSE))) {
   dir.create(rappdirs::user_config_dir("pavian", expand = FALSE),
              recursive = TRUE)

@@ -29,7 +29,10 @@ make install
 
 RUN R -e "options(repos = c(CRAN = 'http://cran.rstudio.com')); install.packages(c('devtools'));"
 RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite('Rsamtools')"
-RUN R -e "devtools::install_github('atlantichalibut/pavian')"
+RUN R -e "devtools::install_github('justinband/pavian')"
+
+# Install the GalaxyConnector
+RUN R -e "devtools::install_github('justinband/r-galaxy-connector')
 
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 RUN rm -f /srv/shiny-server/*

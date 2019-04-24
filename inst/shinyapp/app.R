@@ -3,7 +3,7 @@ library(shiny)
 if(!require(pavian)){
   options(repos = c(CRAN = "http://cran.rstudio.com"))
   if (!require(remotes)) { install.packages("remotes") }
-  remotes::install_github("atlantichalibut/pavian")
+  remotes::install_github("justinband/pavian")
   library(pavian)
 }
 

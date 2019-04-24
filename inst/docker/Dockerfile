@@ -27,9 +27,10 @@ unzip master.zip && mv git2r-master git2r; \
 cd git2r; \
 make install
 
-RUN R -e "options(repos = c(CRAN = 'http://cran.rstudio.com')); install.packages(c('devtools'));"
+RUN R -e "options(repos = c(CRAN = 'http://cran.rstudio.com')); install.packages(c('remotes'));"
+
 RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite('Rsamtools')"
-RUN R -e "devtools::install_github('justinband/pavian')"
+RUN R -e "remotes::install_github('justinband/pavian')"
 
 # Install the GalaxyConnector
 RUN R -e "devtools::install_github('justinband/r-galaxy-connector')"

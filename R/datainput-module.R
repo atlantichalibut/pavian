@@ -63,7 +63,7 @@ uploadFilePanel <- function(ns) {
 
 selectDataPanel <- function(ns) {
   tabPanel("Select data",
-           selectizeInput(inputId = "choosedata",
+           selectizeInput(inputId = ns("choosedata"),
                           label = "Select Dataset",
                           choices = NULL,
                           multiple = TRUE)

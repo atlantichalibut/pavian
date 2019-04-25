@@ -63,10 +63,12 @@ uploadFilePanel <- function(ns) {
 
 selectDataPanel <- function(ns) {
   tabPanel("Select data",
-           selectizeInput(inputId = ns("choosedata"),
-                          label = "Select Dataset",
+           selectizeInput(inputId = ns("select_dataset"),
+                          label = "Select by Dataset ID",
                           choices = NULL,
-                          multiple = TRUE)
+                          multiple = TRUE
+                          ),
+           textOutput(outputId = ns("dataset_out"))
            )
 }
 
@@ -486,6 +488,13 @@ dataInputModule <- function(input, output, session,
     }
   })
   
+  
+  # Select by History ID observing ####
+  # - Newly added
+  # - Must take user input and grab the correct dataset
+  observeEvent(input$select_dataset, {
+    output$dataset_out <- renderText(paste(api, " --- ", url, " --- ", "history_id"))   
+  })
   #output$info_samples <- renderText({
   #  sprintf("<span class='background:#00ff00'>Got %s report files. </span>",
   #          sum(file.exists(report_files())))
@@ -511,4 +520,5 @@ dataInputModule <- function(input, output, session,
   })
   
   return(sample_sets)
+
 }

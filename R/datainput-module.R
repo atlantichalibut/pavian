@@ -62,13 +62,16 @@ uploadFilePanel <- function(ns) {
 }
 
 selectDataPanel <- function(ns) {
+  data_vector <- GalaxyConnector::gx_list_history_datasets()['name']
+  
   tabPanel("Select data",
            selectizeInput(inputId = ns("select_dataset"),
                           label = "Select by Dataset ID",
-                          choices = NULL,
-                          multiple = TRUE
+                          choices = data_vector,
+                          multiple = FALSE
                           ),
-           textOutput(outputId = ns("dataset_out"))
+           actionButton(inputId = ns("btn_confirm_selection"),
+                        label = "Confirm")
            )
 }
 
@@ -492,15 +495,29 @@ dataInputModule <- function(input, output, session,
   # Select by History ID observing ####
   # - Newly added
   # - Must take user input and grab the correct dataset
-  #output$dataset_out <- renderText({})
+  
   observeEvent(input$select_dataset, {
-    output$dataset_out <- renderText({
-      api <- "59ac1b70377598b03dc75da626514b2d"
-      url <- "http://10.10.50.124:8080/"
-      history_id <- "f597429621d6eb2b"
-      paste(api, " --- ", url, " --- ", "history_id")
-      })   
+    # GalaxyConnector::gx_init(
+    #   Sys.getenv("GX_API_KEY"),
+    #   Sys.getenv("GX_GALAXY_URL"),
+    #   Sys.getenv("GX_HISTORY_ID")
+    # )
+    api <- "59ac1b70377598b03dc75da626514b2d"
+    url <- "http://10.10.50.124:8080/"
+    history_id <- "f597429621d6eb2b"
+    GalaxyConnector::gx_init(api, url, history_id)
   })
+  
+  observeEvent(input$btn_confirm_selection, {
+    # Check for select_dataset Null value!
+    
+    # Can we make this global in this module???
+    all_data <- GalaxyConnector::gx_list_history_datasets()
+    data_hid.df <- dplyr::filter(all_data, name == input$select_dataset)['hid']
+    datapath <- GalaxyConnector::gx_get(data_hid.df[1, 1])
+    read_server_directory(dirname(datapath), "Selected dataset", include_base_dir = FALSE)
+  })
+
   #output$info_samples <- renderText({
   #  sprintf("<span class='background:#00ff00'>Got %s report files. </span>",
   #          sum(file.exists(report_files())))

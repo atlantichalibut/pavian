@@ -492,8 +492,14 @@ dataInputModule <- function(input, output, session,
   # Select by History ID observing ####
   # - Newly added
   # - Must take user input and grab the correct dataset
+  #output$dataset_out <- renderText({})
   observeEvent(input$select_dataset, {
-    output$dataset_out <- renderText(paste(api, " --- ", url, " --- ", "history_id"))   
+    output$dataset_out <- renderText({
+      api <- "59ac1b70377598b03dc75da626514b2d"
+      url <- "http://10.10.50.124:8080/"
+      history_id <- "f597429621d6eb2b"
+      paste(api, " --- ", url, " --- ", "history_id")
+      })   
   })
   #output$info_samples <- renderText({
   #  sprintf("<span class='background:#00ff00'>Got %s report files. </span>",

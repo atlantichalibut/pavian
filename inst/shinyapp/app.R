@@ -3,7 +3,8 @@ library(shiny)
 if(!require(pavian)){
   options(repos = c(CRAN = "http://cran.rstudio.com"))
   if (!require(remotes)) { install.packages("remotes") }
-  remotes::install_github("justinband/pavian")
+  remotes::install_github("justinband/pavian",
+                          ref = "galaxy_ui")
   library(pavian)
 }
 

@@ -54,4 +54,5 @@ options(
   )
 )
 
-shiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")
+shiny::shinyApp(dashboardUI, pavianServer, enableBookmarking="server")
+#sshiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")

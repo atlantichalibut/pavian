@@ -6,23 +6,23 @@
 PORT=5000
 
 build:
-	docker build -t atlantichalibut/pavian .
+	docker build -t jband/pavian .
 
 run:
-	docker run --rm -p $(PORT):80 atlantichalibut/pavian
+	docker run --rm -p $(PORT):80 jband/pavian
 
 push:
-	docker push atlantichalibut/pavian
+	docker push jband/pavian
 
 #inspect:
-#	docker run --rm -i -t --entrypoint /bin/bash -p $(PORT):80 atlantichalibut/pavian
+#	docker run --rm -i -t --entrypoint /bin/bash -p $(PORT):80 jband/pavian
 
 stop:
-	docker stop atlantichalibut/pavian; docker rm atlantichalibut/pavian
+	docker stop jband/pavian; docker rm jband/pavian
 
 # Added
 exec:
-	docker exec atlantichalibut/pavian cp import/ srv/shiny-server/example-data/
+	docker exec jband/pavian cp import/ srv/shiny-server/example-data/
 
 # vim:ft=make
 #

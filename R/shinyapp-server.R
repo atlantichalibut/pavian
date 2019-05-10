@@ -175,8 +175,8 @@ pavianServer <- function(input, output, session) {
   ## TODO: Change to reactiveValues (or use makeReactiveBinding?) at some point in time,
   ## then I can call it in observeEvent
   sample_data <- reactive({
-    validate(need(sample_sets$val, message="Upload samples or select sample set."))
-    validate(need(input$sample_set_names, message="Upload samples or select sample set."))
+    shiny::validate(need(sample_sets$val, message="Upload samples or select sample set."))
+    shiny::validate(need(input$sample_set_names, message="Upload samples or select sample set."))
     res <- sample_sets$val[[input$sample_set_names[1]]]
     if (length(input$sample_set_names) > 1) {
       for (set_name in input$sample_set_names[2:length(input$sample_set_names)]) {
@@ -203,9 +203,9 @@ pavianServer <- function(input, output, session) {
   
   ## contains the classification results ('reports') of the selected sample set
   reports <- reactive({
-    validate(need(sample_data(), message="Upload samples or select sample set."))
-    validate(need(length(sample_data()) > 0, message="Upload samples or select sample set."))
-    validate(
+    shiny::validate(need(sample_data(), message="Upload samples or select sample set."))
+    shiny::validate(need(length(sample_data()) > 0, message="Upload samples or select sample set."))
+    shiny::validate(
       need("ReportFilePath" %in% colnames(sample_data()), "ReportFilePath not available!"),
       need("Name" %in% colnames(sample_data()), "Name not available!")
     )
@@ -216,7 +216,7 @@ pavianServer <- function(input, output, session) {
     } else {
       attr(res,"library_size") <- sapply(res, function(x) sum(x$taxonReads))
     }
-    validate(need(length(res) > 0, message = "There are no valid reports in this sample set!"))
+    shiny::validate(need(length(res) > 0, message = "There are no valid reports in this sample set!"))
     res
   })
   

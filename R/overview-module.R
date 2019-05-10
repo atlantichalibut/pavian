@@ -54,7 +54,7 @@ reportOverviewModule <- function(input, output, session, sample_data, reports, d
   })
   
   get_samples_summary <- reactive( {
-    validate(need(reports(), message = "No data available."))
+    shiny::validate(need(reports(), message = "No data available."))
     
     withProgress({
       samples_summary <- do.call(rbind, lapply(reports(), summarize_report))
@@ -81,10 +81,10 @@ reportOverviewModule <- function(input, output, session, sample_data, reports, d
   ## Samples overview output
   output$dt <- DT::renderDataTable({
     samples_summary <- get_samples_summary()
-    validate(need(samples_summary, message = "Error in getting samples summary - please re-select the sample set."))
-    validate(need(max(samples_summary[,2]) > 110,message="It seems this sample set just reports percentages, and not reads."))
-    validate(need(sample_data(), message = "No data available."))
-    validate(need(nrow(samples_summary)==nrow(sample_data()), message = "Different number of rows in summary and sample data"))
+    shiny::validate(need(samples_summary, message = "Error in getting samples summary - please re-select the sample set."))
+    shiny::validate(need(max(samples_summary[,2]) > 110,message="It seems this sample set just reports percentages, and not reads."))
+    shiny::validate(need(sample_data(), message = "No data available."))
+    shiny::validate(need(nrow(samples_summary)==nrow(sample_data()), message = "Different number of rows in summary and sample data"))
     
     if(is.null(datatable_opts$extensions)) { dt_extensions <- list() } else { dt_extensions <- datatable_opts$extensions }
     if(is.null(datatable_opts$class)) { dt_class <- "display" } else { dt_class <- datatable_opts$class }
@@ -107,9 +107,9 @@ reportOverviewModule <- function(input, output, session, sample_data, reports, d
   output$dt_percent <- DT::renderDataTable({
     samples_summary <- get_samples_summary_percent()
 
-    validate(need(samples_summary, message = "Error in getting samples summary - please re-select the sample set."))
-    validate(need(sample_data(), message = "No data available."))
-    validate(need(nrow(samples_summary)==nrow(sample_data()), message = "Different number of rows in summary and sample data"))
+    shiny::validate(need(samples_summary, message = "Error in getting samples summary - please re-select the sample set."))
+    shiny::validate(need(sample_data(), message = "No data available."))
+    shiny::validate(need(nrow(samples_summary)==nrow(sample_data()), message = "Different number of rows in summary and sample data"))
     
     if(is.null(datatable_opts$extensions)) { dt_extensions <- list() } else { dt_extensions <- datatable_opts$extensions }
     if(is.null(datatable_opts$class)) { dt_class <- "display" } else { dt_class <- datatable_opts$class }

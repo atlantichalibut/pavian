@@ -35,7 +35,7 @@ read_reports <- function(report_files, report_names = basename(report_files), ca
                function() {
                  report <- read_report(report_files[i]) %>% shinyTryCatch(message=paste("reading file",report_files[i]))
                  if (is.null(report)|| nrow(report) == 0) {
-                   validate(need(FALSE, message=paste("Error reading file",report_files[i])))
+                   shiny::validate(need(FALSE, message=paste("Error reading file",report_files[i])))
                  }
                  report
                },

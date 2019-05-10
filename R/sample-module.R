@@ -161,17 +161,17 @@ sampleModule <- function(input, output, session, sample_data, reports,
   #})
   
   #observeEvent(selected_sample, {
-  #  validate(need(selected_sample <= length(reports()), message = "Selected sample number too high."))
+  #  shiny::validate(need(selected_sample <= length(reports()), message = "Selected sample number too high."))
   #  updateSelectInput(session, 'sample_selector',
   #                    choices = names(reports()),
   #                    selected = names(reports())[selected_sample])
   #})
   
   sample_view_report <- reactive({
-    validate(need(input$sample_selector,message="Select sample sets with reports"))
+    shiny::validate(need(input$sample_selector,message="Select sample sets with reports"))
     
     my_report <- reports()[[input$sample_selector[1]]]
-    validate(need(my_report, "No sample with that name"))
+    shiny::validate(need(my_report, "No sample with that name"))
     
     ## filter contaminants
     for (c in input$contaminant_selector)
@@ -181,10 +181,10 @@ sampleModule <- function(input, output, session, sample_data, reports,
   })
   
   sample_view_reports <- reactive ({
-    validate(need(input$sample_selector,message="Select sample sets with reports"))
+    shiny::validate(need(input$sample_selector,message="Select sample sets with reports"))
     lapply(input$sample_selector, function(i) {
       my_report <- reports()[[i]]
-      validate(need(my_report, "No sample with that name"))
+      shiny::validate(need(my_report, "No sample with that name"))
     
       ## filter contaminants
       for (c in input$contaminant_selector)
@@ -229,8 +229,8 @@ sampleModule <- function(input, output, session, sample_data, reports,
   })
   
   output$sankey_hover_plots <- renderUI({
-    validate(need(length(reports()) > 1, message="Need more than one sample in sample set.")) 
-    validate(need(hover_plots$taxon, message="Hover or select a taxon to display reads across samples."))
+    shiny::validate(need(length(reports()) > 1, message="Need more than one sample in sample set.")) 
+    shiny::validate(need(hover_plots$taxon, message="Hover or select a taxon to display reads across samples."))
     ns <- session$ns
     my_report <- sample_view_report()
     my_report$name <- sub("^._","",my_report$name)
@@ -424,7 +424,7 @@ sampleModule <- function(input, output, session, sample_data, reports,
     #my_report <- my_report[, c("depth", "cladeReads", "name")]
     #my_report$name <- sub("^._","",my_report$name)
     #eng <- get_nodes_and_links(my_report, 10)
-    validate(need(any(input$taxRanks %in% my_report$taxRank), message = "Report does not have required taxonomy ranks"))
+    shiny::validate(need(any(input$taxRanks %in% my_report$taxRank), message = "Report does not have required taxonomy ranks"))
     build_sankey_network(my_report, taxRanks=input$taxRanks, maxn=input$sankey_maxn,
                          # Sankey options
                          xScalingFactor = input$scalingFactor,
@@ -455,7 +455,7 @@ sampleModule <- function(input, output, session, sample_data, reports,
     #my_report <- my_report[, c("depth", "cladeReads", "name")]
     #my_report$name <- sub("^._","",my_report$name)
     #eng <- get_nodes_and_links(my_report, 10)
-    validate(need(any(input$taxRanks %in% my_report$taxRank), message = "Report does not have required taxonomy ranks"))
+    shiny::validate(need(any(input$taxRanks %in% my_report$taxRank), message = "Report does not have required taxonomy ranks"))
     build_sankey_network(my_report, taxRanks=input$taxRanks, maxn=input$sankey_maxn,
                          #title = input$sample_selector[i],
                          # Sankey options

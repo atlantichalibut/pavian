@@ -232,7 +232,7 @@ shinyTryCatch <- function(..., message = expression) {
              full_message = sprintf("%s ERROR: %s (%s)",
                                     format(Sys.time(), "%D %H:%M"), message, e$message)
              stop(safeError(full_message))
-             validate(need(FALSE, message=message))
+             shiny::validate(need(FALSE, message=message))
            })
 }
 

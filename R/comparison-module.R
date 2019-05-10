@@ -170,12 +170,12 @@ comparisonModule <- function(input, output, session, sample_data, tax_data, clad
   
   get_input <- function(x) {
     ni <- isolate(names(input))
-    validate(need(x %in% ni, message = sprintf("Error: Expect %s in input! Available: %s", x, paste0(sort(ni), collapse = ", "))))
+    shiny::validate(need(x %in% ni, message = sprintf("Error: Expect %s in input! Available: %s", x, paste0(sort(ni), collapse = ", "))))
     input[[x]]
   }
   
   base_set_name <- reactive({
-    validate(need(attr(sample_data(), "set_name"), message = "Attribute set_name not set for sample_data"))
+    shiny::validate(need(attr(sample_data(), "set_name"), message = "Attribute set_name not set for sample_data"))
     basename(attr(sample_data(), "set_name"))
   })
   
@@ -344,7 +344,7 @@ comparisonModule <- function(input, output, session, sample_data, tax_data, clad
       str(res)
     }
     res <- res %>% na_false
-    #validate(need(any(!is.na(res)), message = "Filtered all rows to NA!"),
+    #shiny::validate(need(any(!is.na(res)), message = "Filtered all rows to NA!"),
     #         need(sum(res,na.rm=T)>0, message = "Filtered all data."))
     res
   })
@@ -363,7 +363,7 @@ comparisonModule <- function(input, output, session, sample_data, tax_data, clad
     
     ## Add columns from tax_data_add
     if (!is.null(tax_data_add)) {
-      validate(
+      shiny::validate(
         need(is.data.frame(tax_data_add), message="tax_data_add is no data.frame"),
         need(ncol(tax_data_add) > 1, message="Need more than two columns in tax_data_add"),
         need("TaxID" %in% colnames(tax_columns), message="TaxID not available"))
@@ -385,7 +385,7 @@ comparisonModule <- function(input, output, session, sample_data, tax_data, clad
     req(input$opt_numericColumns)
     
     sel_rows <- shown_rows()
-    validate(need(any(sel_rows,na.rm=T), message = "Filtered all data"))
+    shiny::validate(need(any(sel_rows,na.rm=T), message = "Filtered all data"))
     message(sum(sel_rows, na.rm=T))
     td <- tax_data()[sel_rows,,drop=F]
     #if (input$opt_taxRank == "-" && input$opt_min_taxon_reads > 0) {

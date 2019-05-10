@@ -123,7 +123,7 @@ alignmentModule <- function(input, output, session, sample_data, datatable_opts)
                       findInterval(pos,ranges$x) == 1)
 
     sel <- mypileup$count > 0
-    validate(need(sum(sel) > 0, message = "No reads in selected region"))
+    shiny::validate(need(sum(sel) > 0, message = "No reads in selected region"))
 
     attr(mypileup, "covered_bp") = tapply(mypileup[sel,"pos"], mypileup[sel,"seqnames"], function(x) length(unique(x)))
     attr(mypileup, "sum_count") = tapply(mypileup[sel,"count"], mypileup[sel,"seqnames"], sum)
@@ -167,7 +167,7 @@ alignmentModule <- function(input, output, session, sample_data, datatable_opts)
 
   req_bioc <- function(pkg) {
     #req(require(pkg, character.only=TRUE))
-    validate(need(requireNamespace(pkg), message=sprintf(
+    shiny::validate(need(requireNamespace(pkg), message=sprintf(
       "%s is needed for this functionality. See https://bioconductor.org/packages/release/bioc/html/%s.html for information on how to install it",
       pkg, pkg)))
   }

@@ -22,8 +22,8 @@ COLNAMES <- list(
 )
 
 req_attr <- function(mydf, myattr) {
-  validate(need(myattr), "Need valid attribute definition!")
-  validate(need(attr(mydf,myattr, exact=TRUE)), paste("Attribute", myattr, "is not truthy!"))
+  shiny::validate(need(myattr), "Need valid attribute definition!")
+  shiny::validate(need(attr(mydf,myattr, exact=TRUE)), paste("Attribute", myattr, "is not truthy!"))
   return(attr(mydf,myattr, exact=TRUE))
 }
 
@@ -31,7 +31,7 @@ normalize_data_cols <- function(merged_reports, normalize_col = REPORTATTR("taxo
   data_columns <- req_attr(merged_reports, REPORTATTR("data_columns"))
   normalize_columns <- req_attr(merged_reports, normalize_col)
   
-  validate(need(data_columns, message="data_columns is NULL"),
+  shiny::validate(need(data_columns, message="data_columns is NULL"),
            need(normalize_columns, message=paste(normalize_col,"is NULL")))
   
   if (is.null(sum_reads)) {

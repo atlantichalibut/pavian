@@ -22,11 +22,6 @@ datatable_opts <- reactiveValues(
 #' @export
 pavianServer <- function(input, output, session) {
   
-  api <- "59ac1b70377598b03dc75da626514b2d"
-  url <- "http://10.10.50.124:8080/"
-  history_id <- "f597429621d6eb2b"
-  GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id)
-  
   # The cache directory stores Rds files for read reports
   #cache_dir <- tempdir()
   cache_dir <- NULL

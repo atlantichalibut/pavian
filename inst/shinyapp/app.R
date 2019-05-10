@@ -1,4 +1,5 @@
 library(shiny)
+library(jsonlite)
 
 if(!require(pavian)){
   options(repos = c(CRAN = "http://cran.rstudio.com"))
@@ -54,5 +55,10 @@ options(
   )
 )
 
-shiny::shinyApp(dashboardUI, pavianServer, enableBookmarking="server")
-#sshiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")
+api <- "59ac1b70377598b03dc75da626514b2d"
+url <- "http://10.10.50.124:8080/"
+history_id <- "f597429621d6eb2b"
+GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id)
+
+#shiny::shinyApp(dashboardUI, pavianServer, enableBookmarking="server")
+shiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")

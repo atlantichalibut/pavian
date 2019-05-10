@@ -64,14 +64,14 @@ uploadFilePanel <- function(ns) {
 selectDataPanel <- function(ns) {
   data_vector <- GalaxyConnector::gx_list_history_datasets()['name']
   
-  tabPanel("Select data",
+  tabPanel("Select data from history",
            selectizeInput(inputId = ns("select_dataset"),
-                          label = "Select by Dataset ID",
+                          label = "Select by dataset name",
                           choices = data_vector,
                           multiple = FALSE
                           ),
-           actionButton(inputId = ns("btn_confirm_selection"),
-                        label = "Confirm")
+           shiny::actionButton(inputId = ns("btn_confirm_selection"),
+                               label = "Confirm")
            )
 }
 
@@ -236,7 +236,7 @@ dataInputModule <- function(input, output, session,
   })
   
   read_server_directory <- function(...) {
-    withProgress({read_server_directory2(...)}, message = "Reading directory on server ...")
+    shiny::withProgress({read_server_directory2(...)}, message = "Reading directory on server ...")
   }
   
   read_server_directory2 <-
@@ -257,7 +257,7 @@ dataInputModule <- function(input, output, session,
         return(FALSE)
       }
       
-      validate(
+      shiny::validate(
         need(res$sample_sets, message = "No sample sets available. Set a different directory")
       )
       
@@ -402,13 +402,13 @@ dataInputModule <- function(input, output, session,
   })
   
   get_sample_data <- reactive({
-    validate(need(sample_sets$val, message = "Need samples sets"))
+    shiny::validate(need(sample_sets$val, message = "Need samples sets"))
     sample_sets$val[[input$sample_set_select]]
   })
   
   output$table <- renderRHandsontable({
     sample_data <- get_sample_data()
-    validate(need(sample_data, message = "Need sample data for table."))
+    shiny::validate(need(sample_data, message = "Need sample data for table."))
     
     #sample_data$FormatOK <- ifelse(sample_data$FormatOK,
     #                               "<font color='green'>&#x2713;</font>",
@@ -515,7 +515,7 @@ dataInputModule <- function(input, output, session,
     all_data <- GalaxyConnector::gx_list_history_datasets()
     data_hid.df <- dplyr::filter(all_data, name == input$select_dataset)['hid']
     datapath <- GalaxyConnector::gx_get(data_hid.df[1, 1])
-    read_server_directory(dirname(datapath), "Selected dataset", include_base_dir = FALSE)
+    read_server_directory(dirname(datapath), "Selected dataset")
   })
 
   #output$info_samples <- renderText({

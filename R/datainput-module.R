@@ -62,9 +62,9 @@ uploadFilePanel <- function(ns) {
 }
 
 selectDataPanel <- function(ns) {
-  api <- Sys.getenv("API_KEY")
-  url <- Sys.getenv("GALAXY_URL")
-  history_id <- Sys.getenv("HISTORY_ID")
+  api <- Sys.getenv("GX_API_KEY")
+  url <- Sys.getenv("GX_GALAXY_URL")
+  history_id <- Sys.getenv("GX_HISTORY_ID")
   GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id) # Initialize our pkg env
   
   user_data <- GalaxyConnector::gx_list_history_datasets()['name']
@@ -494,23 +494,6 @@ dataInputModule <- function(input, output, session,
       sample_sets$val <- sample_sets$val[!selected_item]
       sample_sets$selected <- names(sample_sets$val)[1]
     }
-  })
-  
-  
-  # Select by History ID observing ####
-  # - Newly added
-  # - Must take user input and grab the correct dataset
-  
-  observeEvent(input$select_dataset, {
-    # GalaxyConnector::gx_init(
-    #   Sys.getenv("GX_API_KEY"),
-    #   Sys.getenv("GX_GALAXY_URL"),
-    #   Sys.getenv("GX_HISTORY_ID")
-    # )
-    api <- "59ac1b70377598b03dc75da626514b2d"
-    url <- "http://10.10.50.124:8080/"
-    history_id <- "f597429621d6eb2b"
-    GalaxyConnector::gx_init(api, url, history_id)
   })
   
   observeEvent(input$btn_confirm_selection, {

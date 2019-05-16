@@ -55,10 +55,11 @@ options(
   )
 )
 
-api <- "59ac1b70377598b03dc75da626514b2d"
-url <- "http://10.10.50.124:8080/"
-history_id <- "f597429621d6eb2b"
-GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id)
+api <- Sys.getenv("GX_API")
+url <- Sys.getenv("GX_URL")
+history_id <- Sys.getenv("GX_HISTORY_ID")
 
-#shiny::shinyApp(dashboardUI, pavianServer, enableBookmarking="server")
+GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id) # Initialize our pkg env
+
+# Shiny app call
 shiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")

@@ -515,7 +515,8 @@ dataInputModule <- function(input, output, session,
     all_data <- GalaxyConnector::gx_list_history_datasets()
     data_hid.df <- dplyr::filter(all_data, name == input$select_dataset)['hid']
     datapath <- GalaxyConnector::gx_get(data_hid.df[1, 1])
-    read_server_directory(dirname(datapath), "Selected dataset")
+    read_server_directory(dirname(datapath), "Selected dataset") # dirname will remove any file associated
+      # read_server_directory can only read an entire directory. I modified GalaxyConnector to put each file downloaded into a directory that only contains itself
   })
 
   #output$info_samples <- renderText({

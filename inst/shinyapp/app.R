@@ -18,7 +18,7 @@ if (!require(Rsamtools)) {
 if(!require(GalaxyConnector)){
   options(repos = c(CRAN = "http://cran.rstudio.com")) 
   if(!require(remotes)){ install.packages("remotes") }
-  remotes::install_github("justinband/r-galaxy-connector")
+  remotes::install_github("justinband/r-galaxy-connector", ref="pavian")
   library(GalaxyConnector)
 }
 
@@ -55,9 +55,9 @@ options(
   )
 )
 
-api <- Sys.getenv("GX_API")
-url <- Sys.getenv("GX_URL")
-history_id <- Sys.getenv("GX_HISTORY_ID")
+api <- Sys.getenv("API_KEY")
+url <- Sys.getenv("GALAXY_URL")
+history_id <- Sys.getenv("HISTORY_ID")
 
 GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id) # Initialize our pkg env
 

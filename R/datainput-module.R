@@ -62,12 +62,17 @@ uploadFilePanel <- function(ns) {
 }
 
 selectDataPanel <- function(ns) {
-  data_vector <- GalaxyConnector::gx_list_history_datasets()['name']
+  api <- Sys.getenv("API_KEY")
+  url <- Sys.getenv("GALAXY_URL")
+  history_id <- Sys.getenv("HISTORY_ID")
+  GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id) # Initialize our pkg env
+  
+  user_data <- GalaxyConnector::gx_list_history_datasets()['name']
   
   tabPanel("Select data from history",
            selectizeInput(inputId = ns("select_dataset"),
                           label = "Select by dataset name",
-                          choices = data_vector,
+                          choices = user_data,
                           multiple = FALSE
                           ),
            shiny::actionButton(inputId = ns("btn_confirm_selection"),

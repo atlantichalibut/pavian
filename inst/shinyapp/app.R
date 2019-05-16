@@ -55,11 +55,5 @@ options(
   )
 )
 
-api <- Sys.getenv("API_KEY")
-url <- Sys.getenv("GALAXY_URL")
-history_id <- Sys.getenv("HISTORY_ID")
-
-GalaxyConnector::gx_init(API_KEY = api, GALAXY_URL = url, HISTORY_ID = history_id) # Initialize our pkg env
-
 # Shiny app call
 shiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking="server")

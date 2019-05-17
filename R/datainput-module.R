@@ -500,7 +500,7 @@ dataInputModule <- function(input, output, session,
     # Check for select_dataset Null value!
     
     # Can we make this global in this module???
-    all_data <- GalaxyConnector::gx_list_history_datasets()
+    all_data <- dplyr::filter(GalaxyConnector::gx_list_history_datasets(), deleted == FALSE)
     data_hid.df <- dplyr::filter(all_data, name == input$select_dataset)['hid']
     datapath <- GalaxyConnector::gx_get(data_hid.df[1, 1])
     

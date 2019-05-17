@@ -6,7 +6,8 @@
 \usage{
 dataInputModuleUI(id, server_access = getOption("pavian.server_access",
   default = FALSE),
-  start_with = getOption("pavian.start_data_input_with", "Upload files"))
+  start_with = getOption("pavian.start_data_input_with",
+  "Select data from history"))
 }
 \arguments{
 \item{id}{Namespace ID.}

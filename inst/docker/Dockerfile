@@ -10,16 +10,19 @@ RUN apt-get update && apt-get install -y \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
-    libssl-dev \
     libcairo2-dev \
-    libxt-dev
+    libxt-dev \
+    xtail \
+    wget
 
 # Download and install shiny server
 RUN wget --no-verbose https://download3.rstudio.org/ubuntu-14.04/x86_64/VERSION -O "version.txt" && \
     VERSION=$(cat version.txt)  && \
     wget --no-verbose "https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
     gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb 
+    rm -f version.txt ss-latest.deb && \
+    . /etc/environment && \
+    chown shiny:shiny /var/lib/shiny-server
 
 RUN R -e "options(repos = c(CRAN = 'http://cran.rstudio.com')); install.packages(c('remotes'));"
 RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite('Rsamtools')"
@@ -27,10 +30,11 @@ RUN R -e "source('https://bioconductor.org/biocLite.R'); biocLite('Rsamtools')"
 ARG hehe
 # Install Pavian from github
 # 	Use ref= to specify the branch to download. Removing ref= defaults to master
-RUN R -e "remotes::install_github('justinband/pavian', ref='galaxy_ui')"
+RUN R -e "remotes::install_github('justinband/pavian', ref='galaxy')"
 
 # Install GalaxyConnector from github
 RUN R -e "remotes::install_github('justinband/r-galaxy-connector', ref='pavian')"
+RUN R -e "remotes::install_github('fbreitwieser/pavian')"
 
 COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 RUN rm -rf /srv/shiny-server/*

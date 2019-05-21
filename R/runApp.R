@@ -7,6 +7,7 @@
 #' @param load_server_directory Load server directory.
 #' @param load_example_data Load example data.
 #' @param maxUploadSize Maximum upload size for reports and BAM files.
+#' @param enableBookmarking Enable bookmarking? Possible values 'disable' or 'server' (default).
 #'
 #' @param ... Additional arguments to \code{\link[shiny]{runApp}}, such as \code{host} and \code{port}.
 #'
@@ -17,6 +18,7 @@ runApp <- function(cache_dir = "cache",
                    load_example_data = FALSE,
                    load_server_directory = FALSE,
                    maxUploadSize = NULL,
+                   enableBookmarking = "server",
                    ...) {
 
   appDir <- system.file("shinyapp", package = "pavian")
@@ -64,8 +66,15 @@ runApp <- function(cache_dir = "cache",
   )
 
   old_options <- options(new_options)
-  shiny::runApp(appDir,  ...)
-  
+
+  shiny::shinyApp(pavian::dashboardUI, pavian::pavianServer, enableBookmarking=enableBookmarking, options = list(...))
+
   ## TODO: Restoring options like this does not work - we never get here after shiny::runApp as the server keeps running
-  options(old_options)
+  #options(old_options)
+}
+
+#' @describeIn runApp Create pavian app (passes arguments to runApp)
+#' @export
+pavianApp <- function(...) {
+    pavian::runApp(...)
 }

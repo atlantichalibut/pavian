@@ -8,17 +8,18 @@ serverDataPanel <- function(ns) {
   tabPanel(
     "Use data on server",
     id = "server_dir",
-    "Be careful which directory you select - if there are too many files, the process might hang.",
-    " Pavian will check the specified directory and its direct children for report files.",
+    " Select a directory in the file browser and press 'Read selected directories' to load it into Pavian.",
+    " You may also use wildcards to directly upload specified paths.",
     br(),
     div(id="server_data_dir_div",
     shinyWidgets::searchInput(ns("search_data_dir"),
                               label = "Specify directory on machine running Pavian",
                               value = getOption("pavian.server_dir", ""),
-                              #btnReset = icon("star"),
+                              btnReset = icon("level-up", lib="glyphicon"),
+                              resetValue = NULL,
                               width = "100%",
                               btnSearch = icon("server"))),
-    div(style="max-height=400px; overflow-y: scroll",
+    div(style="max-height:400px; overflow-y: scroll",
       shinyFileTree::shinyFileTreeOutput(ns('file_tree'))
     ),
     shinyjs::hidden(actionButton(ns("btn_read_tree_dirs"), "Read selected directories")),
@@ -107,7 +108,7 @@ dataInputModuleUI <- function(id,
     Read more about it in the <a target='blank' href='http://biorxiv.org/content/early/2016/10/31/084715.full.pdf+html'>Preprint</a> or its <a target='blank' href='https://raw.githubusercontent.com/fbreitwieser/pavian/blob/master/inst/doc/pavian-walkthrough.pdf'>vignette</a>. It's built on <a href='https://www.r-project.org/' target='blank'>R</a> and <a target='blank' href='http://shiny.rstudio.com/'>Shiny</a>, and supports <a target='blank' href='https://ccb.jhu.edu/software/kraken/'>Kraken</a>, <a target='blank' href='https://github.com/infphilo/centrifuge'>Centrifuge</a> and <a target='blank' href='https://bitbucket.org/biobakery/metaphlan2'>MetaPhlAn</a> report files. Please note that currently the default Centrifuge report format is not supported. To generate a compatible report, use the script centrifuge-kreport that is distributed with Centrifuge. 
       </p>
       <p>
-      For help, and to report an issue with the tool, please go to <a target='blank' href='https://github.com/fbreitwieser/pavian'>https://github.com/fbreitwieser/pavian</a>.
+      For help and more documenation please go to <a target='blank' href='https://github.com/fbreitwieser/pavian'>https://github.com/fbreitwieser/pavian</a>.
       </p>"
     )
   ),
@@ -257,7 +258,7 @@ dataInputModule <- function(input, output, session,
       read_error_msg$val_neg <- res$error_msg$val_neg
       if (is.null(read_error_msg$val_pos)) {
         if (is.null(res$error_msg$val_neg)) {
-          read_error_msg$val_neg <- "Unable to read report files form directory."
+          read_error_msg$val_neg <- sprintf("Unable to read report files from directory %s.", data_dir)
         }
         return(FALSE)
       }
@@ -281,10 +282,12 @@ dataInputModule <- function(input, output, session,
   
   display_tree <- reactiveValues(val = FALSE)
   
+  file_tree_dir <- reactiveValues(val = NULL)
+  
   output$file_tree <- shinyFileTree::renderShinyFileTree({
-    req(input$search_data_dir)
+    data_dir <- file_tree_dir$val
+    req(data_dir)
     req(display_tree$val)
-    data_dir <- isolate(input$search_data_dir)
     req(length(data_dir) > 0 && nchar(data_dir) > 0)
     shinyjs::disable("btn_read_tree_dirs")
     shinyjs::show("btn_read_tree_dirs")
@@ -292,8 +295,23 @@ dataInputModule <- function(input, output, session,
                                       state=list(opened=TRUE),
                                       children=shinyFileTree::get_list_from_directory(data_dir,
                                                                                       max_depth=1,
-                                                                                      hide_files=TRUE)),
+                                                                                      show_dir_info=TRUE)),
+                                 opts = shinyFileTree::shinyFileTreeOpts(
+                                   animation = FALSE, 
+                                   themes.stripes = FALSE,
+                                   multiple = TRUE),
                                  plugins = c("wholerow"))
+  })
+  
+  observeEvent(input$file_tree_dblclick, {
+    #message("doubleclick observed")
+    fnames <- sub(" \\([0-9]+ f[io].*\\)$", "", input$file_tree_selected)
+    if (dir.exists(fnames)) {
+      tryCatch({
+        shinyWidgets::updateSearchInput(session, "search_data_dir", value = fnames)
+        file_tree_dir$val <- fnames
+      }, error = message)
+    }
   })
   
   observeEvent(input$file_tree_selected, {
@@ -314,7 +332,11 @@ dataInputModule <- function(input, output, session,
   })
   
   observeEvent(input$search_data_dir_reset, {
-    message(input$search_data_dir)
+    tryCatch({
+      fnames <- dirname(input$search_data_dir)
+      shinyWidgets::updateSearchInput(session, "search_data_dir", value = fnames)
+      file_tree_dir$val <- fnames
+    }, error = message)
   })
   
   observeEvent(input$search_data_dir, {
@@ -335,6 +357,8 @@ dataInputModule <- function(input, output, session,
         if (!is.null(recently_used_dir_user_config))
           writeLines(recently_used_dirs$val, recently_used_dir_user_config)
       }
+    } else {
+      file_tree_dir$val <- input$search_data_dir
     }
   })
   
@@ -352,19 +376,19 @@ dataInputModule <- function(input, output, session,
   })
   
   observeEvent(input$rud_1, {
-    updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[1])
+    shinyWidgets::updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[1])
   })
   observeEvent(input$rud_2, {
-    updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[2])
+    shinyWidgets::updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[2])
   })
   observeEvent(input$rud_3, {
-    updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[3])
+    shinyWidgets::updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[3])
   })
   observeEvent(input$rud_4, {
-    updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[4])
+    shinyWidgets::updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[4])
   })
   observeEvent(input$rud_5, {
-    updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[5])
+    shinyWidgets::updateSearchInput(session, "search_data_dir", value = recently_used_dirs$val[5])
   })
   
   update_sample_set_hot <- reactive({

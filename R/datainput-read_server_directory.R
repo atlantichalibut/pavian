@@ -66,9 +66,9 @@ read_server_directory1 <- function(data_dirs, sample_set_name = NULL,
         return1(paste("No files in directory ", data_dir, "."))
       }
       n_files <- length(list.files(data_dir))
-      max_files <- getOption("pavian.maxFiles", 100)
+      max_files <- getOption("pavian.maxFiles", 300)
       if (n_files > max_files) {
-        return1(paste("There are ",n_files," files in the directory, but the highest allowed number is ",max_files," files ", data_dir, " - please subdivide the data into smaller directories, or set the option 'pavian.maxFiles' to a higher number (e.g. 'options(pavian.maxFiles=250)')."))
+        return1(paste("There are ",n_files," files in the directory, but the highest allowed number is ",max_files," files ", data_dir, " - please subdivide the data into smaller directories, or set the option 'pavian.maxFiles' to a higher number (e.g. 'options(pavian.maxFiles=350)')."))
       }
       
       if (include_base_dir) {

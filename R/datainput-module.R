@@ -233,7 +233,7 @@ dataInputModule <- function(input, output, session,
         actionButton(ns("btn_remove_sample_set"), label = "Remove sample set", icon=icon("trash"))
       ),
       br(),
-      rhandsontable::rHandsontableOutput(ns("table")),
+      rhandsontable::rHandsontableOutput(ns("table"), height="400px"),
       p("You can specify which samples to include as well as their names. Be sure to save the table to make the changes persistent."),
       actionButton(
         ns("btn_save_table"),

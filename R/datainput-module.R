@@ -74,7 +74,8 @@ selectDataPanel <- function(ns) {
            selectizeInput(inputId = ns("select_dataset"),
                           label = "Select by dataset name",
                           choices = user_data,
-                          multiple = FALSE
+                          multiple = FALSE,
+                          selected = NULL
                           ),
            shiny::actionButton(inputId = ns("btn_confirm_selection"),
                                label = "Confirm")
@@ -521,19 +522,26 @@ dataInputModule <- function(input, output, session,
   })
   
   observeEvent(input$btn_confirm_selection, {
-    # Check for select_dataset Null value!
-    
-    # Can we make this global in this module???
-    all_data <- dplyr::filter(GalaxyConnector::gx_list_history_datasets(), deleted == FALSE)
-    data_hid.df <- dplyr::filter(all_data, name == input$select_dataset)['hid']
-    datapath <- GalaxyConnector::gx_get(data_hid.df[1, 1])
-    
-    if(!is.null(datapath)){
-      read_server_directory(base::dirname(datapath), "Selected dataset") # dirname will remove any file associated
-      # read_server_directory can only read an entire directory. I modified GalaxyConnector to put each file downloaded into a directory that only contains itself
-    } else { # There was no return datapath
-      read_error_msg$val_neg <- "The data from this collection doesn't exist outside of the collection in this history. Please copy data into history first, then create a collection"
+    if(input$select_dataset != ''){ # Make sure that we have something selected first!
+      
+      all_data <- dplyr::filter(GalaxyConnector::gx_list_history_datasets(), deleted == FALSE) # Filter out any deleted dataset
+      data_hid.df <- dplyr::filter(all_data, name == input$select_dataset) # Grab the data that's been selected
+      
+      # Take the first piece of data
+      #   This could possibly be an issue since with collections there are multiple versions of the same data (by name).
+      #   If one of the pieces of data we need are changed then things can possibly go wrong
+      datapath <- GalaxyConnector::gx_get(data_hid.df[1, 'hid'])
+      
+      if(!is.null(datapath)){
+        read_server_directory(base::dirname(datapath), data_hid.df[1, 'name']) # dirname will remove any file associated
+        # read_server_directory can only read an entire directory. I modified GalaxyConnector to put each file downloaded into a directory that only contains itself
+      } else { # There was no return datapath
+        read_error_msg$val_neg <- "The data from this collection doesn't exist outside of the collection in this history. Please copy data into history first, then create a collection"
+      }
+    } else {
+      read_error_msg$val_neg <- "Please select a dataset"
     }
+    
   })
 
   #output$info_samples <- renderText({

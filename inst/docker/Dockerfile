@@ -7,6 +7,7 @@ MAINTAINER Adrian Zetner "adrian.zetner@canada.ca"
 RUN apt-get update && apt-get install -y \
     sudo \
     gdebi-core \
+	net-tools \
     pandoc \
     pandoc-citeproc \
     libcurl4-gnutls-dev \
@@ -44,10 +45,10 @@ RUN rm -f /srv/shiny-server/*
 # Move pavians app.R file into /srv/shiny-server/ to be launched
 RUN R -e "sapply(list.files(system.file('shinyapp',package='pavian'),full.names=TRUE),file.copy,to='/srv/shiny-server/',recursive=TRUE)"
 
-EXPOSE 80
-
 COPY shiny-server.sh /usr/bin/shiny-server.sh
 COPY monitor_traffic.sh /monitor_traffic.sh
+
+EXPOSE 80
 
 # Run it!
 CMD ["/usr/bin/shiny-server.sh"]

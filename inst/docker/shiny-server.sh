@@ -10,4 +10,7 @@ env | grep URL | awk '{print "GX_"$1}' >> /etc/R/Renviron
 env | grep HISTORY_ID | awk '{print "GX_"$1}' >> /etc/R/Renviron
 echo "## End Galaxy Information ##" >> /etc/R/Renviron
 
+chmod +x /monitor_traffic.sh
+exec /monitor_traffic.sh &
+
 exec shiny-server >> /var/log/shiny-server.log 2>&1
